@@ -12,11 +12,25 @@ $app->get('/[{name}]', function ($request, $response, $args) {
 
 
 	$app->get('/biographies/{id}', function ($request, $response, $args) {
-		// Sample log message
-		$this->logger->info("Slim-Skeleton '/biographies/{id}' route. Biographie demandée : " . $args['id']);
+		$id = $args['id'];
+		// Trace route
+		$this->logger->info("Slim-Skeleton '/biographies/{id}' route. Biographie demandée : " . $id);
 	
-		$service = new \biusante\api\MainApiService($this);
-		
-		// Render index view
-		return $this->renderer->render($response, 'index.phtml', $args);
+		try {
+			$service = new \biusante\api\MainApiService($this);
+			$jsonResults = $service->getJsonBiographie($id);
+			
+			if ($jsonResults) {
+				// if found, return JSON response
+				$response = $response->withHeader('Content-type', 'application/json');
+				$response->getBody()->write($jsonResults);
+			} else {
+				// return 404 server error
+				$response = $response->withStatus(404);
+			}
+		} catch (Exception $e) {
+			$response = $response->withStatus(400);
+			$response = $response->withHeader('X-Status-Reason', $e->getMessage());
+		}
+
 	});

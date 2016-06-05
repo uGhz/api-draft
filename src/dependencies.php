@@ -20,17 +20,10 @@ $container['logger'] = function ($c) {
 
 // SQLite access
 $container['db'] = function ($c) {
-// 	$db = $c['settings']['db'];
-// 	$pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'],
-// 			$db['user'], $db['pass']);
-// 	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-// 	$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-	
 	$dbSettings = $c['settings']['db'];
 	$pdo = new PDO('sqlite:'.$dbSettings['filepath']);
 	$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // ERRMODE_WARNING | ERRMODE_EXCEPTION | ERRMODE_SILENT
-	
 	
 	return $pdo;
 };
