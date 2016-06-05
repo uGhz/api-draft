@@ -13,5 +13,10 @@ return [
             'name' => 'slim-app',
             'path' => __DIR__ . '/../logs/app.log',
         ],
+    		
+    	// SQLite settings
+    	'db' => [
+    			'filepath' => __DIR__ . '/../data/api.sqlite'
+    	]
     ],
 ];
