@@ -16,13 +16,17 @@ $app->get('/[{name}]', function ($request, $response, $args) {
 		// Trace route
 		$this->logger->info("Slim-Skeleton '/biographies/{id}' route. Biographie demandée : " . $id);
 	
+		$response = $response->withHeader('Access-Control-Allow-Origin', '*');
+		$response = $response->withHeader('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With, X-authentication, X-client');
+		$response = $response->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+		$response = $response->withHeader('Content-type', 'application/json');
+		
 		try {
 			$service = new \biusante\api\MainApiService($this);
 			$jsonResults = $service->getJsonBiographie($id);
-			$this->logger->info("Service Response : " . var_export($jsonResults, TRUE));
+			// $this->logger->info("Service Response : " . var_export($jsonResults, TRUE));
 			if (!empty($jsonResults) && $jsonResults != 'false') {
 				// if found, return JSON response
-				$response = $response->withHeader('Content-type', 'application/json');
 				$response->getBody()->write($jsonResults);
 			} else {
 				// return 404 server error
