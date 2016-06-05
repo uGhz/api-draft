@@ -19,8 +19,8 @@ $app->get('/[{name}]', function ($request, $response, $args) {
 		try {
 			$service = new \biusante\api\MainApiService($this);
 			$jsonResults = $service->getJsonBiographie($id);
-			
-			if ($jsonResults) {
+			$this->logger->info("Service Response : " . var_export($jsonResults, TRUE));
+			if (!empty($jsonResults) && $jsonResults != 'false') {
 				// if found, return JSON response
 				$response = $response->withHeader('Content-type', 'application/json');
 				$response->getBody()->write($jsonResults);
@@ -32,5 +32,6 @@ $app->get('/[{name}]', function ($request, $response, $args) {
 			$response = $response->withStatus(400);
 			$response = $response->withHeader('X-Status-Reason', $e->getMessage());
 		}
-
+		
+		return $response;
 	});
