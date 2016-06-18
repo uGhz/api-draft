@@ -20,7 +20,7 @@ class MainApiService {
 	
 	public function getWikidataJsonBiographie($id) {
 		$provider = new wikidataProvider($this->container);
-		$biographie = $provider->getBiographie($id);
+		$biographie = $provider->getBiographieByWikidataId($id);
 	
 		return $biographie;
 	}
