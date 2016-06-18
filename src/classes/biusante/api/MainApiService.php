@@ -18,6 +18,13 @@ class MainApiService {
 		return json_encode($biographie);
 	}
 	
+	public function getWikidataJsonBiographie($id) {
+		$provider = new wikidataProvider($this->container);
+		$biographie = $provider->getBiographie($id);
+	
+		return $biographie;
+	}
+	
 	private function jsonEncode($object) {
 		return json_encode($object);
 	}
