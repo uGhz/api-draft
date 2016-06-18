@@ -1,7 +1,7 @@
 <?php
 namespace biusante\api;
 
-class wikidataProvider {
+class WikidataProvider {
 	
 	const VIAF_ID_PROPERTY = 'P214';
 	const WIKIDATA_BASE_URL = 'https://query.wikidata.org/sparql?format=json&query=';
@@ -51,7 +51,7 @@ SELECT
 ?nationaliteLabel
 (GROUP_CONCAT(DISTINCT(?occupationLabel); separator="|") as ?occupations)
 WHERE {
-	FILTER (?item = <http://www.wikidata.org/entity/:id>) .
+	FILTER (?item = wd::id) .
 	?item wdt:P18 ?illustration .
 	?item wdt:P19 ?lieuNaissance .
 	?item wdt:P20 ?lieuDeces .

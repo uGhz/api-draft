@@ -19,10 +19,17 @@ class MainApiService {
 	}
 	
 	public function getWikidataJsonBiographie($id) {
-		$provider = new wikidataProvider($this->container);
+		$provider = new WikidataProvider($this->container);
 		$biographie = $provider->getBiographieByWikidataId($id);
 	
 		return $biographie;
+	}
+	
+	public function getWikimediaCommonsJsonCategoryImages($category) {
+		$provider = new WikimediaCommonsProvider($this->container);
+		$images = $provider->getImagesByCategory($category);
+	
+		return $images;
 	}
 	
 	private function jsonEncode($object) {
