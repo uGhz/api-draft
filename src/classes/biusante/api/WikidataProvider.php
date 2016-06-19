@@ -17,6 +17,7 @@ SELECT
 	?dateNaissance
 	?dateDeces
 	?nationaliteLabel
+	?wikimediaCommonsCategory
 	(GROUP_CONCAT(DISTINCT(?occupationLabel); separator="|") as ?occupations)
 WHERE {
   ?item wdt:P214 ":id" .
@@ -27,13 +28,14 @@ WHERE {
   ?item wdt:P570 ?dateDeces .
   ?item wdt:P27 ?nationalite .
   ?item wdt:P106 ?occupation .
+  ?item wdt:P373 ?wikimediaCommonsCategory .
   ?occupation rdfs:label ?occupationLabel .
   FILTER (LANG(?occupationLabel) = 'fr') .
   SERVICE wikibase:label {
     bd:serviceParam wikibase:language "fr,en"
   }
 }
-GROUP BY ?item ?itemLabel ?itemDescription ?illustration ?lieuNaissanceLabel ?lieuDecesLabel ?dateNaissance ?dateDeces ?nationaliteLabel
+GROUP BY ?item ?itemLabel ?itemDescription ?illustration ?lieuNaissanceLabel ?lieuDecesLabel ?dateNaissance ?dateDeces ?nationaliteLabel ?wikimediaCommonsCategory
 LIMIT 1
 EOT;
 	
@@ -49,6 +51,7 @@ SELECT
 ?dateNaissance
 ?dateDeces
 ?nationaliteLabel
+?wikimediaCommonsCategory
 (GROUP_CONCAT(DISTINCT(?occupationLabel); separator="|") as ?occupations)
 WHERE {
 	FILTER (?item = wd::id) .
@@ -59,13 +62,14 @@ WHERE {
 	?item wdt:P570 ?dateDeces .
 	?item wdt:P27 ?nationalite .
 	?item wdt:P106 ?occupation .
+	?item wdt:P373 ?wikimediaCommonsCategory .
 	?occupation rdfs:label ?occupationLabel .
 	FILTER (LANG(?occupationLabel) = 'fr') .
 	SERVICE wikibase:label {
 		bd:serviceParam wikibase:language "fr,en"
 	}
 }
-GROUP BY ?item ?itemLabel ?itemDescription ?illustration ?lieuNaissanceLabel ?lieuDecesLabel ?dateNaissance ?dateDeces ?nationaliteLabel
+GROUP BY ?item ?itemLabel ?itemDescription ?illustration ?lieuNaissanceLabel ?lieuDecesLabel ?dateNaissance ?dateDeces ?nationaliteLabel ?wikimediaCommonsCategory
 LIMIT 1
 EOT;
 

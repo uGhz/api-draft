@@ -5,9 +5,9 @@ class WikimediaCommonsProvider {
 	
 	const WIKIMEDIA_COMMONS_BASE_URL = 'https://commons.wikimedia.org/w/api.php';
 
-	const MAX_WIDTH = 300;
-	const MAX_HEIGHT = null;
-	const MAX_RESULTS = 20;
+	const DEFAULT_MAX_WIDTH = 300;
+	const DEFAULT_MAX_HEIGHT = null;
+	const DEFAULT_MAX_RESULTS = 20;
 	
 	private $container;
 	
@@ -29,12 +29,22 @@ class WikimediaCommonsProvider {
 	}
 	
 	private function buildQueryString($category) {
+		$maxHeight = self::DEFAULT_MAX_HEIGHT;
+		$maxWidth = self::DEFAULT_MAX_WIDTH;
+		$maxResults = self::DEFAULT_MAX_RESULTS;
+		
 		$queryString = '?format=json&action=query&generator=categorymembers';
 		$queryString .= '&gcmtype=file&prop=info|imageinfo';
-		$queryString .= '&gcmlimit=' . self::MAX_RESULTS;
+		if (!empty($maxResults)) {
+			$queryString .= '&gcmlimit=' . $maxResults;
+		}
 		$queryString .= '&iiprop=url';
-		$queryString .= '&iiurlwidth=' . self::MAX_WIDTH;
-		$queryString .= '&iiurlheight=' . self::MAX_HEIGHT;
+		if (!empty($maxWidth)) {
+			$queryString .= '&iiurlwidth=' . $maxWidth;
+		}
+		if (!empty($maxHeight)) {
+			$queryString .= '&iiurlheight=' . $maxHeight;
+		}
 		$queryString .= '&gcmtitle=Category:' . urlencode($category);
 		return $queryString;
 	}
