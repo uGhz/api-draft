@@ -4,8 +4,11 @@ namespace biusante\api;
 class WikimediaCommonsProvider {
 	
 	const WIKIMEDIA_COMMONS_BASE_URL = 'https://commons.wikimedia.org/w/api.php';
-	const QUERY_IMAGES_BY_CATEGORY = '?format=json&action=query&list=categorymembers&cmtype=file&cmtitle=Category:';
 
+	const MAX_WIDTH = 300;
+	const MAX_HEIGHT = null;
+	const MAX_RESULTS = 20;
+	
 	private $container;
 	
 	public function __construct(\Slim\Container $container) {
@@ -14,9 +17,8 @@ class WikimediaCommonsProvider {
 	
 	public function getImagesByCategory($category) {
 		$url = self::WIKIMEDIA_COMMONS_BASE_URL;
-		$query = self::QUERY_IMAGES_BY_CATEGORY . urlencode($category);
-		$url = $url . $query;
-		$this->container->logger->info("Before Wikimedia Commons request");
+		$url = $url . $this->buildQueryString($category);
+		$this->container->logger->info("Before Wikimedia Commons request : " . $url);
 		
 		$result = file_get_contents($url);
 		$this->container->logger->info("After Wikimedia Commons request");
@@ -24,5 +26,16 @@ class WikimediaCommonsProvider {
 
 		// print_r($result);
 		return $result;
+	}
+	
+	private function buildQueryString($category) {
+		$queryString = '?format=json&action=query&generator=categorymembers';
+		$queryString .= '&gcmtype=file&prop=info|imageinfo';
+		$queryString .= '&gcmlimit=' . self::MAX_RESULTS;
+		$queryString .= '&iiprop=url';
+		$queryString .= '&iiurlwidth=' . self::MAX_WIDTH;
+		$queryString .= '&iiurlheight=' . self::MAX_HEIGHT;
+		$queryString .= '&gcmtitle=Category:' . urlencode($category);
+		return $queryString;
 	}
 }
