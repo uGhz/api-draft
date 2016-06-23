@@ -18,6 +18,13 @@ class MainApiService {
 		return json_encode($biographie);
 	}
 	
+	public function getViafJsonLinks($id) {
+		$provider = new ViafProvider($this->container);
+		$links = $provider->getLinksByViafId($id);
+	
+		return $links;
+	}
+	
 	public function getWikidataJsonBiographie($id) {
 		$provider = new WikidataProvider($this->container);
 		$biographie = $provider->getBiographieByWikidataId($id);
