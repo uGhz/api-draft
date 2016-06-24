@@ -1,0 +1,38 @@
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+SELECT
+?item
+?itemLabel
+?illustration
+?dateNaissance
+?lieuNaissance
+?dateDeces
+?lieuDeces
+?wikimediaCommonsCategory
+(GROUP_CONCAT(DISTINCT(?occupationLabel); separator="|") as ?occupations)
+WHERE {
+	FILTER (?item = wd:Q687) .
+  	?item	wdt:P106/rdfs:label ?occupationLabel FILTER (LANG(?occupationLabel) = 'fr') .
+  
+	OPTIONAL { ?item	wdt:P18 ?illustration . }
+
+  	OPTIONAL { ?item	wdt:P20/rdfs:label ?lieuDecesLabel FILTER (LANG(?lieuDecesLabel) = 'fr') }
+  	BIND (COALESCE(?lieuDecesLabel, '') as ?lieuDeces)
+
+  	OPTIONAL { ?item	wdt:P19/rdfs:label ?lieuNaissanceLabel FILTER (LANG(?lieuNaissanceLabel) = 'fr') }
+  	BIND (COALESCE(?lieuNaissanceLabel, '') as ?lieuNaissance)
+
+  	OPTIONAL { ?item	wdt:P570 ?dateDecesLabel }
+  	BIND (COALESCE(?dateDecesLabel, '') as ?dateDeces)
+
+  	OPTIONAL { ?item	wdt:P569 ?dateNaissanceLabel }
+  	BIND (COALESCE(?dateNaissanceLabel, '') as ?dateNaissance)
+      
+  	OPTIONAL { 	?item	wdt:P373 ?wikimediaCommonsCategoryNode }
+  	BIND (COALESCE(?wikimediaCommonsCategoryNode, '') as ?wikimediaCommonsCategory)
+
+	SERVICE wikibase:label {
+		bd:serviceParam wikibase:language "fr,en"
+	}
+}
+GROUP BY ?item ?itemLabel ?illustration ?dateNaissance ?lieuNaissance ?dateDeces ?lieuDeces ?wikimediaCommonsCategory
+#LIMIT 1
